@@ -1,0 +1,133 @@
+<html>
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">        
+
+	<style>
+	body {
+		background-image: url(pirate.jpg);
+		background-size: 200px;
+	}
+	#title {
+		margin-top: 10px;
+		padding-bottom: 10px;
+	}
+	#guess {
+		color: black;
+	}
+	#box{
+		width: 450px;
+		height: 150px;
+		background: black;
+		text-align: center;
+	}
+    .box {
+		margin:4px;
+		transition: 0.3s;
+		border-radius: 5px; 
+		background-color: grey;
+		border: 2px solid black;
+		height: 150px;
+		width: 450px;
+	}
+	</style>
+  
+</head>    
+	<div class="container">
+		<center>
+			<img id="title" src="treasurehunt.png" alt="" />
+		</center>
+		<div id="boxx" class="row justify-content-center"></div>
+		<center>
+			<h2 id="guess">Guesses: </h2>
+		</center>
+    </div>
+ 
+	<div class="modal" tabindex="-1" role="dialog" id="myModal">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+		
+				<div class="modal-header">
+					<h5 class="modal-title">Do you wish to play again?</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" id="yes">Yes</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal" id="no">No</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>        
+	
+    <script>
+    /* global $ */
+    $(document).ready(function() 
+    {
+       var model={};
+    //model
+        function initializeModel() {
+        model.boxes=6;
+        model.guesses=0;
+        var random = Math.floor(Math.random() * (model.boxes)); 
+        model.prize = random;
+        model.color;
+        model.click=true;
+        }
+    //view       
+    function updateView() {
+        console.log("updateView was called");
+        $('#boxx').empty(); 
+        for (var i =0 ;i<model.boxes;i++) {
+			var item = $("<div></div>");
+            item.attr("id", i);
+            item.addClass("box");
+            $('#boxx').append(item);
+        }
+    }
+    //controller
+    initializeModel();
+    updateView();
+    
+    $(document).on("click",".box",function() {
+        console.log("box number is " + $(this).attr("id"));
+        var boxId=$(this).attr("id");
+      
+		if(model.click!=false) {
+          if(boxId == model.prize) {
+            console.log("You Win!");
+            model.guesses++;
+            console.log(model.guesses);
+            $(this).css("background-color", "#D4AF37");
+            console.log(this);
+    
+    
+            $('#myModal').modal('show');
+        } else {
+        console.log("Wrong!");
+        $(this).css("background-color", "black");
+		model.guesses++;
+        console.log(model.guesses + " guesses");
+        }
+        $('#guess').empty(); 
+        $("#guess").append("Guesses: " + model.guesses);
+      }
+    });
+    $('#yes').click(function() {
+		$('#myModal').modal('hide');
+        initializeModel();
+        updateView();
+    });
+    $('#no').click(function() 
+    {
+		$('#myModal').modal('hide');
+        model.click=false;
+      });
+    });
+      
+    </script>
+</html>
